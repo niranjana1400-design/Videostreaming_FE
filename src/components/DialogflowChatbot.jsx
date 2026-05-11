@@ -27,7 +27,7 @@ const DialogflowChatbot = () => {
     setInput("");
 
     try {
-      const res = await fetch("https://videostreaming-be-1.onrender.com/chat", {
+      const res = await fetch("https://videostreaming-be-2.onrender.com/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg.text }),

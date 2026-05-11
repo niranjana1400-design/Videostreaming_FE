@@ -37,7 +37,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("https://videostreaming-be-1.onrender.com/api/auth/register", {
+      const res = await fetch("https://videostreaming-be-2.onrender.com/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

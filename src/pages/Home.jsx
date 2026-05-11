@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import VideoPlayer from "../components/VideoPlayer";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const WATCHLIST_KEY = "watchlist";
 const PLAYLIST_KEY = "playlist";

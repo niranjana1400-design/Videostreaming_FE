@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaCamera, FaSave, FaArrowLeft, FaTrash, FaEdit } from "react-icons/fa";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const Profile = () => {
   const { user, setUser } = useContext(AuthContext);

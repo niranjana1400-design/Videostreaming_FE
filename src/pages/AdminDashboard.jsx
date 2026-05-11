@@ -20,7 +20,7 @@ import {
   Legend,
 } from "recharts";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const AdminDashboard = () => {
   const { user, loading } = useContext(AuthContext);

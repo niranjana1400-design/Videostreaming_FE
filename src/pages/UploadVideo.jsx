@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const UploadVideo = () => {
   const navigate = useNavigate();

@@ -9,10 +9,10 @@ import {
   FaTrash
 } from "react-icons/fa";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const VideoCard = ({ video, openModal, darkMode, onDelete, user }) => {
-  // ✅ CRASH FIX: stop rendering if video is null/undefined
+  
   if (!video) return null;
 
   const videoId = video?._id;

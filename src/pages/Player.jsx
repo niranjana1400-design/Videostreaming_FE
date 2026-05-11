@@ -15,7 +15,7 @@ const Player = () => {
   const fetchVideo = async () => {
     try {
       const res = await axios.get(
-        `https://videostreaming-be-1.onrender.com/api/videos/${id}`
+        `https://videostreaming-be-2.onrender.com/api/videos/${id}`
       );
       setVideo(res.data);
     } catch (err) {
@@ -35,7 +35,7 @@ const Player = () => {
 
     try {
       await axios.post(
-        `https://videostreaming-be-1.onrender.com/api/videos/${id}/comment`,
+        `https://videostreaming-be-2.onrender.com/api/videos/${id}/comment`,
         { text: comment },
         {
           headers: {

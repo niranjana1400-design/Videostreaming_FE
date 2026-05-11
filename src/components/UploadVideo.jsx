@@ -3,7 +3,7 @@ import { FaUpload } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const UploadVideo = () => {
   const navigate = useNavigate();

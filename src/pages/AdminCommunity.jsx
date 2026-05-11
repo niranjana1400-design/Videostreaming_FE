@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-const API = "https://videostreaming-be-1.onrender.com/api";
+const API = "https://videostreaming-be-2.onrender.com/api";
 
 const AdminCommunity = () => {
   const [posts, setPosts] = useState([]);

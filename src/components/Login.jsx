@@ -29,7 +29,7 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await fetch("https://videostreaming-be-1.onrender.com/api/auth/login", {
+      const res = await fetch("https://videostreaming-be-2.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

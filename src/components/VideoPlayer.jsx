@@ -44,7 +44,7 @@ const VideoPlayer = ({ video, onClose }) => {
 
     try {
       const res = await fetch(
-        `https://videostreaming-be-1.onrender.com/api/videos/${videoId}/comment`,
+        `https://videostreaming-be-2.onrender.com/api/videos/${videoId}/comment`,
         {
           method: "POST",
           headers: {
@@ -67,7 +67,7 @@ const VideoPlayer = ({ video, onClose }) => {
   const confirmDelete = async (commentId) => {
     try {
       const res = await fetch(
-        `https://videostreaming-be-1.onrender.com/api/videos/${videoId}/comment/${commentId}`,
+        `https://videostreaming-be-2.onrender.com/api/videos/${videoId}/comment/${commentId}`,
         {
           method: "DELETE",
           headers: {

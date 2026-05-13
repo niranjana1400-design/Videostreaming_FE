@@ -5,16 +5,21 @@ import { AuthContext } from "../context/AuthContext";
 
 const Welcome = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext); 
+  const { user } = useContext(AuthContext);
 
-  // Auto navigate to Home after 3 seconds
+  // ================= AUTO REDIRECT =================
   useEffect(() => {
+    if (!user) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
     const timer = setTimeout(() => {
-      navigate("/home");
+      navigate("/home", { replace: true });
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, user]);
 
   return (
     <div
@@ -26,11 +31,12 @@ const Welcome = () => {
         backgroundPosition: "center",
       }}
     >
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to- from-black/70 via-gray-900/60 to-red-900/60"></div>
+      {/* OVERLAY (FIXED) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-red-900/60"></div>
 
-      {/* Content */}
+      {/* CONTENT */}
       <div className="relative z-10 text-center text-white px-6">
+
         <h1 className="text-5xl md:text-7xl font-extrabold mb-4">
           Welcome to <span className="text-red-500">StreamX</span>
         </h1>
@@ -38,16 +44,19 @@ const Welcome = () => {
         <p className="text-xl md:text-2xl text-gray-300 mb-6">
           Hello,{" "}
           <span className="text-red-400 font-semibold">
-            {user?.name || "Current User"}
+            {user?.name || "User"}
           </span>
         </p>
 
-        {/* Loading Spinner */}
+        {/* LOADER */}
         <div className="flex justify-center">
           <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
 
-        <p className="mt-4 text-gray-400">Loading your experience...</p>
+        <p className="mt-4 text-gray-400">
+          Loading your experience...
+        </p>
+
       </div>
     </div>
   );

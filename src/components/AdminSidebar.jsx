@@ -36,17 +36,24 @@ const AdminSidebar = ({ setCategory }) => {
     setTimeout(() => navigate("/login"), 100);
   };
 
+  const isActive = (path) => location.pathname === path;
+
   const base =
-    "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition hover:bg-[#e50914] hover:scale-[1.03] active:scale-95";
+    "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition";
+
+  const activeStyle = "bg-[#e50914] text-white";
+  const normalStyle = "hover:bg-[#2a2a2a] text-gray-300 hover:text-white";
 
   return (
     <>
-      {/* MOBILE BUTTON */}
-      <div className="md:hidden fixed top-16 left-0 w-full h-10 bg-black text-white flex items-center px-3 z-[150] border-b border-gray-800">
+      {/* MOBILE TOP BAR */}
+      <div className="md:hidden fixed top-0 left-0 w-full h-12 bg-black text-white flex items-center px-3 z-[150] border-b border-gray-800">
         <button onClick={() => setOpen(true)}>
           <FaBars />
         </button>
-        <span className="ml-3 font-semibold text-red-500">Menu</span>
+        <span className="ml-3 font-semibold text-red-500">
+          Admin Panel
+        </span>
       </div>
 
       {/* OVERLAY */}
@@ -61,21 +68,22 @@ const AdminSidebar = ({ setCategory }) => {
       <aside
         className={`
           fixed left-0 z-[160]
-          top-16
-          h-[calc(100vh-64px)]
+          top-12 md:top-0
+          h-[calc(100vh-48px)]
+          md:h-screen
           w-64
-          bg-[#141414] text-white
+          bg-[#141414]
+          text-white
           border-r border-gray-800
           flex flex-col
           transform transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
-          shadow-2xl
         `}
       >
-        {/* CLOSE BTN */}
+        {/* CLOSE BUTTON */}
         <div className="md:hidden flex justify-end p-3">
-          <button onClick={() => setOpen(false)} className="text-white">
+          <button onClick={() => setOpen(false)}>
             <FaTimes />
           </button>
         </div>
@@ -83,33 +91,71 @@ const AdminSidebar = ({ setCategory }) => {
         {/* MENU */}
         <div className="flex-1 overflow-y-auto px-3 space-y-2">
 
-          <button onClick={() => go("/admin")} className={base}>
+          {/* DASHBOARD */}
+          <button
+            onClick={() => go("/admin")}
+            className={`${base} ${
+              isActive("/admin") ? activeStyle : normalStyle
+            }`}
+          >
             <FaTachometerAlt /> Dashboard
           </button>
 
-          <button onClick={() => setCategory("Videos")} className={base}>
+          {/* VIDEOS */}
+          <button
+            onClick={() => setCategory?.("Videos")}
+            className={`${base} ${normalStyle}`}
+          >
             <FaVideo /> Videos
           </button>
 
-          <button onClick={() => setCategory("Users")} className={base}>
+          {/* USERS */}
+          <button
+            onClick={() => setCategory?.("Users")}
+            className={`${base} ${normalStyle}`}
+          >
             <FaUsers /> Users
           </button>
 
-          <button onClick={() => setCategory("Analytics")} className={base}>
+          {/* ANALYTICS */}
+          <button
+            onClick={() => setCategory?.("Analytics")}
+            className={`${base} ${normalStyle}`}
+          >
             <FaChartBar /> Analytics
           </button>
 
-          <button onClick={() => go("/admin/community")} className={base}>
+          {/* COMMUNITY */}
+          <button
+            onClick={() => go("/admin/community")}
+            className={`${base} ${
+              isActive("/admin/community") ? activeStyle : normalStyle
+            }`}
+          >
             <FaRegNewspaper /> Community
           </button>
 
           <hr className="border-gray-700" />
 
-          <button onClick={() => go("/admin/add-video")} className={base}>
+          {/* ADD VIDEO */}
+          <button
+            onClick={() => go("/admin/add-video")}
+            className={`${base} ${
+              isActive("/admin/add-video") ? activeStyle : normalStyle
+            }`}
+          >
             <FaPlus /> Add Video
           </button>
 
-          <button onClick={() => go("/admin/upload-video")} className={base}>
+          {/* UPLOAD VIDEO */}
+          <button
+            onClick={() => go("/admin/upload-video")}
+            className={`${base} ${
+              isActive("/admin/upload-video")
+                ? activeStyle
+                : normalStyle
+            }`}
+          >
             <FaUpload /> Upload
           </button>
         </div>
@@ -118,7 +164,7 @@ const AdminSidebar = ({ setCategory }) => {
         <div className="p-3 border-t border-gray-800">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-3 bg-[#e50914] hover:bg-red-700 rounded-lg transition hover:scale-105"
+            className="w-full flex items-center gap-3 p-3 bg-[#e50914] hover:bg-red-700 rounded-lg transition"
           >
             <FaSignOutAlt /> Logout
           </button>

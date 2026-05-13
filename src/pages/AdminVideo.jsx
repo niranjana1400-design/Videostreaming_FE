@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 const API = "https://videostreaming-be-2.onrender.com/api";
 
@@ -30,6 +31,7 @@ const AdminVideo = () => {
 
     if (!token) {
       alert("Unauthorized");
+      navigate("/login");
       return;
     }
 
@@ -44,81 +46,100 @@ const AdminVideo = () => {
 
       alert("Video Added Successfully 🎬");
 
-      
-      navigate("/admin/add-video");
+      navigate("/admin-community");
 
     } catch (err) {
       console.error(err);
-      alert("Error adding video");
+
+      alert(
+        err.response?.data?.message || "Error adding video"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-purple-900">
+    <div className="min-h-screen flex items-center justify-center bg-black px-4">
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-96"
+        className="bg-[#141414] border border-gray-800 p-6 rounded-2xl shadow-xl w-full max-w-md"
       >
 
-        <h2 className="text-xl font-bold mb-4 text-center">
-          ➕ Add Video (Admin)
-        </h2>
+        {/* HEADER */}
+        <div className="flex items-center gap-3 mb-6">
 
+          <button
+            type="button"
+            onClick={() => navigate("/admin")}
+            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"
+          >
+            <FaArrowLeft />
+          </button>
+
+          <h2 className="text-2xl font-bold text-white">
+            ➕ Add Video
+          </h2>
+
+        </div>
+
+        {/* TITLE */}
         <input
           type="text"
           name="title"
           placeholder="Video Title"
           value={form.title}
           onChange={handleChange}
-          className="w-full p-2 mb-3 border rounded"
+          className="w-full p-3 mb-4 rounded bg-black border border-gray-700 text-white outline-none"
           required
         />
 
+        {/* URL */}
         <input
           type="text"
           name="url"
           placeholder="Video URL"
           value={form.url}
           onChange={handleChange}
-          className="w-full p-2 mb-3 border rounded"
+          className="w-full p-3 mb-4 rounded bg-black border border-gray-700 text-white outline-none"
           required
         />
 
+        {/* THUMBNAIL */}
         <input
           type="text"
           name="thumbnail"
           placeholder="Thumbnail URL"
           value={form.thumbnail}
           onChange={handleChange}
-          className="w-full p-2 mb-3 border rounded"
-          required
+          className="w-full p-3 mb-4 rounded bg-black border border-gray-700 text-white outline-none"
         />
 
+        {/* CATEGORY */}
         <select
           name="category"
           value={form.category}
           onChange={handleChange}
-          className="w-full p-2 mb-3 border rounded"
+          className="w-full p-3 mb-5 rounded bg-black border border-gray-700 text-white outline-none"
         >
           <option>Education</option>
           <option>Music</option>
           <option>Comedy</option>
           <option>Movie</option>
+          <option>Other</option>
         </select>
 
+        {/* BUTTON */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700"
+          className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition"
         >
           {loading ? "Adding..." : "Add Video"}
         </button>
 
       </form>
-
     </div>
   );
 };

@@ -6,51 +6,80 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // LOAD USER
+  // ================= LOAD USER =================
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("user");
-      const token = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
 
-      if (stored && token) {
-        const parsed = JSON.parse(stored);
+      if (storedUser && storedToken) {
+        const parsedUser = JSON.parse(storedUser);
 
-        setUser({
-          ...parsed,
-          token,
-          role: parsed.role || "user",
-        });
+        const userData = {
+          _id: parsedUser._id || parsedUser.id || "",
+          name: parsedUser.name || "",
+          email: parsedUser.email || "",
+          role: parsedUser.role || "user",
+          token: storedToken,
+        };
+
+        setUser(userData);
       } else {
         setUser(null);
       }
-    } catch (err) {
-      console.log(err);
-      localStorage.clear();
-      setUser(null);
-    }
 
-    setLoading(false);
+    } catch (err) {
+      console.error("Auth Load Error:", err);
+
+      // SAFE REMOVE
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // LOGIN 
+  // ================= LOGIN =================
   const login = (data) => {
-    const userData = {
-      _id: data._id || data.id,   
-      name: data.name,
-      email: data.email,
-      role: data.role,
-      token: data.token,
-    };
+    try {
+      const userData = {
+        _id: data?._id || data?.id || "",
+        name: data?.name || "",
+        email: data?.email || "",
+        role: data?.role || "user",
+        token: data?.token || "",
+      };
 
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", data.token);
+      setUser(userData);
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(userData)
+      );
+
+      localStorage.setItem(
+        "token",
+        userData.token
+      );
+
+    } catch (err) {
+      console.error("Login Error:", err);
+    }
   };
 
-  // LOGOUT
+  // ================= LOGOUT =================
   const logout = () => {
-    setUser(null);
-    localStorage.clear();
+    try {
+      setUser(null);
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
+    } catch (err) {
+      console.error("Logout Error:", err);
+    }
   };
 
   return (

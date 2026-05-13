@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 const API = "https://videostreaming-be-2.onrender.com/api";
 
@@ -12,11 +13,15 @@ const UploadVideo = () => {
   const [file, setFile] = useState(null);
   const [category, setCategory] = useState("Other");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const token = localStorage.getItem("token");
 
   const handleUpload = async () => {
-    if (!title) return alert("Enter title");
+    setError("");
+
+    if (!title.trim()) return setError("Title required");
+    if (!url.trim() && !file) return setError("Video URL or file required");
 
     setLoading(true);
 
@@ -24,7 +29,11 @@ const UploadVideo = () => {
       const upload = async (finalUrl) => {
         await axios.post(
           `${API}/videos`,
-          { title, url: finalUrl, category },
+          {
+            title: title.trim(),
+            url: finalUrl,
+            category,
+          },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -37,44 +46,64 @@ const UploadVideo = () => {
         const reader = new FileReader();
 
         reader.onloadend = async () => {
-          await upload(reader.result);
-          navigate("/home"); // ✅ FIXED
+          try {
+            await upload(reader.result);
+            navigate("/home");
+          } catch {
+            setError("Upload failed");
+          } finally {
+            setLoading(false);
+          }
         };
 
         reader.readAsDataURL(file);
         return;
       }
 
-      await upload(url);
-      navigate("/home"); // ✅ FIXED
-
+      await upload(url.trim());
+      navigate("/home");
     } catch (err) {
-      console.log(err);
-    } finally {
+      setError(err?.response?.data?.message || "Upload failed");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
 
-      <div className="w-full max-w-md bg-zinc-900 p-6 rounded-xl border border-zinc-800">
+      {/* HOME BUTTON */}
+      <button
+        onClick={() => navigate("/home")}
+        className="absolute top-5 left-5 flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-lg"
+      >
+        <FaHome />
+        Home
+      </button>
 
-        <h2 className="text-2xl font-bold text-center mb-6 text-red-500">
-          Upload Movie
+      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 p-6 rounded-xl">
+
+        <h2 className="text-2xl font-bold text-center text-red-500 mb-6">
+          Upload Video
         </h2>
 
+        {error && (
+          <div className="bg-red-500/20 border border-red-500 text-red-300 p-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
         <input
-          className="w-full p-3 mb-3 bg-black border border-zinc-700 rounded"
-          placeholder="Title"
+          type="text"
+          placeholder="Video Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 mb-4 bg-black border border-zinc-700 rounded"
         />
 
         <select
-          className="w-full p-3 mb-3 bg-black border border-zinc-700 rounded"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          className="w-full p-3 mb-4 bg-black border border-zinc-700 rounded"
         >
           <option>Other</option>
           <option>Education</option>
@@ -84,17 +113,18 @@ const UploadVideo = () => {
         </select>
 
         <input
-          className="w-full p-3 mb-3 bg-black border border-zinc-700 rounded"
+          type="text"
           placeholder="Video URL (optional)"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
+          className="w-full p-3 mb-4 bg-black border border-zinc-700 rounded"
         />
 
         <input
           type="file"
           accept="video/*"
-          className="w-full mb-4"
           onChange={(e) => setFile(e.target.files[0])}
+          className="w-full mb-5"
         />
 
         <button
@@ -102,17 +132,15 @@ const UploadVideo = () => {
           disabled={loading}
           className="w-full bg-red-600 hover:bg-red-700 py-3 rounded font-semibold"
         >
-          {loading ? "Uploading..." : "Upload Movie"}
+          {loading ? "Uploading..." : "Upload Video"}
         </button>
 
-        {/* ✅ FIXED CANCEL */}
         <button
           onClick={() => navigate("/home")}
-          className="w-full mt-3 bg-zinc-700 hover:bg-zinc-600 py-2 rounded"
+          className="w-full mt-3 bg-zinc-700 hover:bg-zinc-600 py-3 rounded"
         >
           Cancel
         </button>
-
       </div>
     </div>
   );

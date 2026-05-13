@@ -1,5 +1,11 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+} from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
@@ -10,60 +16,97 @@ const Signup = () => {
     role: "user",
   });
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error, setError] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
 
   const navigate = useNavigate();
-  const { user, login } = useContext(AuthContext);
 
+  const { user, login } =
+    useContext(AuthContext);
+
+  // ================= REDIRECT =================
   useEffect(() => {
     if (user) {
-      user.role === "admin"
-        ? navigate("/admin")
-        : navigate("/login");
+      if (user.role === "admin") {
+        navigate("/admin", {
+          replace: true,
+        });
+      } else {
+        navigate("/welcome", {
+          replace: true,
+        });
+      }
     }
   }, [user, navigate]);
 
+  // ================= HANDLE CHANGE =================
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
   };
 
+  // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
+
     setLoading(true);
 
     try {
-      const res = await fetch("https://videostreaming-be-2.onrender.com/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch(
+        "https://videostreaming-be-2.onrender.com/api/auth/register",
+        {
+          method: "POST",
 
-      const data = await res.json();
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify(form),
+        }
+      );
+
+      const data =
+        await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Signup failed");
+        setError(
+          data.message ||
+            "Signup failed"
+        );
+
         setLoading(false);
+
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data));
-
+      // ONLY LOGIN
       login(data);
 
-      data.role === "admin"
-        ? navigate("/admin")
-        : navigate("/welcome");
+      if (data.role === "admin") {
+        navigate("/admin", {
+          replace: true,
+        });
+      } else {
+        navigate("/welcome", {
+          replace: true,
+        });
+      }
 
     } catch (error) {
-      setError("Server error. Please try again.");
+      console.error(error);
+
+      setError(
+        "Server error. Please try again."
+      );
     }
 
     setLoading(false);
@@ -71,17 +114,18 @@ const Signup = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center relative"
       style={{
         backgroundImage:
           "url('https://cdn.mos.cms.futurecdn.net/rDJegQJaCyGaYysj2g5XWY.jpg')",
       }}
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60"></div>
 
-      {/* Card */}
-      <div className="relative bg-black-700/90 backdrop-blur-md rounded-3xl shadow-xl w-full max-w-md p-8 sm:p-10">
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/60" />
+
+      {/* CARD */}
+      <div className="relative bg-white/10 backdrop-blur-md rounded-3xl shadow-xl w-full max-w-md p-8 sm:p-10 border border-white/20">
 
         <h2 className="text-3xl font-bold text-white text-center mb-8">
           Create Account
@@ -93,7 +137,10 @@ const Signup = () => {
           </p>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+        >
 
           {/* NAME */}
           <input
@@ -114,7 +161,7 @@ const Signup = () => {
             value={form.email}
             onChange={handleChange}
             required
-              autoComplete="email"
+            autoComplete="email"
             className="w-full p-3 rounded-xl bg-white text-black outline-none"
           />
 
@@ -126,7 +173,7 @@ const Signup = () => {
             value={form.password}
             onChange={handleChange}
             required
-              autoComplete="current-password"
+            autoComplete="current-password"
             className="w-full p-3 rounded-xl bg-white text-black outline-none"
           />
 
@@ -137,30 +184,43 @@ const Signup = () => {
             onChange={handleChange}
             className="w-full p-3 rounded-xl bg-gray-800 text-white outline-none"
           >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
+            <option value="user">
+              User
+            </option>
+
+            <option value="admin">
+              Admin
+            </option>
+
           </select>
 
           {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl"
+            className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition"
           >
-            {loading ? "Creating account..." : "Sign Up"}
+            {loading
+              ? "Creating account..."
+              : "Sign Up"}
           </button>
 
         </form>
 
-        {/* LOGIN LINK */}
+        {/* LOGIN */}
         <p className="mt-6 text-gray-300 text-center">
+
           Already have an account?{" "}
+
           <span
-            onClick={() => navigate("/login")}
+            onClick={() =>
+              navigate("/login")
+            }
             className="text-white font-semibold cursor-pointer hover:underline"
           >
             Login
           </span>
+
         </p>
 
       </div>
